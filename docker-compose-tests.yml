@@ -1,0 +1,25 @@
+# Depends on webapp
+
+version: '3'
+services:
+
+  testapp:
+    image: webapp
+    env_file:
+      - test.env
+#    environment:
+#      - PROJECT_TEST=PRODUCTION
+#      - TEST_IMG
+#      - LIVE_TEST_PORT=5000
+#      - DB_PASSWORD
+#      - DB_USER
+#      - DB_HOST=db
+    command:  /bin/bash -c "cd django_shop && python manage.py test"
+    depends_on:
+      - selenium
+
+  selenium:
+    image: selenium/standalone-chrome-debug
+    ports:
+      - 4444:4444
+      - 5900:5900

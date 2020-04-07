@@ -1,0 +1,65 @@
+{% load get_settings from core_tags %}
+{% load cache %}
+
+
+{% cache 500 detail_product product.id %}
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">
+              <a href="{{ product.get_absolute_url }}" class="text-dark"><strong>{{ product.name }}</strong></a>
+          </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <img class="img-fluid" src="{{ product.image.url }}" style="max-height: 400px">
+            </div>
+            <div class="col-lg-6">
+                {% with variant=product.get_main_variant size=product.get_size %}
+                <h3><strong>{{ product.name }}</strong></h3>
+                <p class="font-weight-bold"><span data-id="variant-price">{{ variant.price }}</span>{% get_settings 'CUR_CURRENCY' %}</p>
+
+                {% if product.get_count < 0 %}
+                            count
+                        {% endif %}
+
+                  {% if size %}
+                <div class="col-3 px-0 pb-2">
+                    <label>Size</label>
+                  <select id="size-change-product" class="custom-select">
+                      {% for variant in size %}
+                 <option value="{{ variant.id }}" data-price="{{ variant.price }}">{{ variant.size }}</option>
+                      {% endfor %}
+                        </select>
+                    </div>
+                  {% endif %}
+                <button type="button" class="btn btn-secondary btn-block mb-3"  data-id="{{ variant.id }}" data-action="order-product" >
+                    <span class="font-weight-bold" style="font-size: 20px">
+                        <i class="material-icons"> add_shopping_cart </i>
+                        Add to Cart
+                    </span>
+                </button>
+                    {% endwith %}
+                {% if product.description %}
+                <h5 class="font-weight-bold">DESCRIPTION:</h5>
+                <p>{{ product.description }}</p>
+                {% endif %}
+
+                {% if product.features %}
+                <h5 class="font-weight-bold">FEATURES:</h5>
+                <p>{{ product.features }}</p>
+                {% endif %}
+            </div>
+        </div>
+          </div>
+      <div class="modal-footer">
+      </div>
+
+    </div>
+  </div>
+{% endcache %}

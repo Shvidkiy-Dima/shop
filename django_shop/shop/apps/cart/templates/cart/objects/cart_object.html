@@ -1,0 +1,96 @@
+{% load get_settings from core_tags  %}
+
+
+<div class="modal-dialog  modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">
+              <strong>Cart</strong>
+          </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-cart">
+                        <tbody class="bg-white">
+                        {% for variant, count, exceed in cart_obj.get_items %}
+                        <tr class="cart-item" data-id="body-product-cart">
+                            <td class="align-middle" width="150">
+                                  <img class="img-fluid" src="{{ variant.product.image.url }}">
+                            </td>
+                            <td class="align-middle">
+                               <a href="#" class="font-weight-bold text-dark">{{ variant.product.name }}</a>
+                                <span data-id="cart-variant-price">{% widthratio variant.price 1 count %}</span>{% get_settings 'CUR_CURRENCY' %}
+
+                                   <span data-id="cart-product-exceed" class="text-danger pl-5">{% if exceed %}В наличие только {{ variant.count }}{% endif %}</span>
+
+                                {% if variant.size %}
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <span class="text-muted text-uppercase">{{ variant.size }}</span>
+                                    </li>
+                                </ul>
+                                {% endif %}
+                                    <div class="input-group input-group-sm mt-4">
+                                        <div class="input-group-prepend border">
+                                             <button class="btn" data-id="{{ variant.id }}" data-action="delete-cart-product">
+                                                <span>
+                                                    <i class="material-icons">remove</i>
+                                                </span>
+                                            </button>
+                                        </div>
+
+                                        <button class="btn border">
+                                        <span data-id="cart-counter-product">{{ count }}</span>
+                                        </button>
+                                        <div class="input-group-append border">
+                                            <button class="btn" data-id="{{ variant.id }}" data-action="order-product">
+                                                <span>
+                                                    <i class="material-icons">add</i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                            </td>
+                            <td class="align-middle text-right" width="50">
+                                <a class="btn" data-id="{{ variant.id }}" data-action="delete-cart-product-all">
+                                    <i class="material-icons">close</i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+          </div>
+
+            </div>
+
+
+               <div class="modal-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <a class="btn btn-secondary text-white" type="button" href="{% url 'order:form-order' %}">Checkout</a>
+                    </div>
+            </div>
+
+        </div>
+
+
+
+      </div>
+
+
+    </div>
+
+
+

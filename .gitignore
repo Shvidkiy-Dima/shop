@@ -1,0 +1,11 @@
+htmlcov
+.coverage
+*.log
+__pycache__/
+*.manifest
+*.env
+!migrations/__init__.py
+collectedstatic/
+mysql_data/
+staticfiles/
+

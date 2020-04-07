@@ -1,0 +1,23 @@
+{% load crispy_forms_tags %}
+
+
+
+
+<form method="GET" action="" id="filter-form">
+  <div class="form-group pl-3">
+        <div class="form-row">
+
+    <div class="col-2">
+        {{ form.ordering|as_crispy_field }}
+    </div>
+    <div class="col-2">
+        {{ form.average_price__lt|as_crispy_field }}
+    </div>
+         <div class="col-2 pt-3 mt-4">
+         <a  class="btn btn-outline-primary" id="filter-form-submit">Filter</a>
+    </div>
+
+
+        </div>
+    </div>
+</form>

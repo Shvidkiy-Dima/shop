@@ -1,0 +1,156 @@
+{% extends 'core/mainpage.html' %}
+{% load cart_tags %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% load static %}
+{% load get_settings from core_tags %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'order/css/order.css' %}">
+{% endblock %}
+
+
+
+
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-7 mt-0">
+
+
+
+
+            <div class="sticky-top col-11">
+
+
+                            <ul class="nav pb-1">
+                <li class="nav-item">
+                    <i class="material-icons">keyboard_arrow_left</i>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'core:main-page' %}">  Return to shop  </a>
+                </li>
+            </ul>
+
+
+                <ul class="breadcrumb bg-white">
+      {% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">Оформление</li>
+    <li class="breadcrumb-item" >Оплата</li>
+      {% endblock %}
+            </ul>
+
+            {% block form_order %}
+
+                {% if not cart_obj.is_empty %}
+                    <form method="POST" action="" >
+                        {% csrf_token %}
+                        <div class="form-group  ml-4 pl-5">
+                            <h4 class="font-weight-bold">Contact information</h4>
+                                 {{ form.email|as_crispy_field }}
+                            <h4 class="font-weight-bold">Shipping address</h4>
+                                <div class="form-row">
+                                    <div class="col">
+                                        {{ form.first_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.last_name|as_crispy_field }}
+                                    </div>
+                              </div>
+                            {{ form.country|as_crispy_field }}
+                            {{ form.city|as_crispy_field }}
+                            {{ form.address|as_crispy_field }}
+                            {{ form.postal_code|as_crispy_field }}
+
+                            <div class="card">
+                                  <div class="card-body pb-0 pt-3">
+                                      {{ form.shipping.0 }}
+                                 <hr class="mt-0">
+                                  {{ form.shipping.1 }}
+                                  </div>
+                            </div>
+
+
+
+                            <input type="submit" class="btn btn-secondary float-right mt-1" value="Make an order">
+                        </div>
+                    </form>
+            {% else %}
+                <p> Cart is empty </p>
+            {% endif %}
+                {% endblock %}
+        </div>
+        </div>
+        <div class="col px-0 mx-0"  style="background-color: #F5F4F4">
+            <div class="sticky-top alert alert-secondary border-bottom" >
+                        <ul class="nav">
+                            <li class="nav-item pr-3">
+                                <h4>Total price</h4> {% block total_price %} {{ cart_obj.total_price|intcomma }}  {% endblock %}{% get_settings 'CUR_CURRENCY' %}
+                            </li>
+
+
+
+                            <li class="nav-item pl-3">
+
+                                <h4>Shipping</h4>{% block shipping_price %}-{% endblock %}{% get_settings 'CUR_CURRENCY' %}
+
+                             </li>
+
+
+
+                            <li class="nav-item px-5">
+
+                                <h4>Taxes</h4>{% block taxes_price %}-{% endblock %}{% get_settings 'CUR_CURRENCY' %}
+
+                             </li>
+
+
+                        </ul>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-cart">
+                        <tbody>
+                        {% block products_order %}
+
+                            {% for variant, count, exceed in cart_obj.get_items %}
+                                {% if not exceed %}
+                                    <tr class="cart-item" data-id="body-product-cart">
+                                        <td class="align-middle" width="100">
+                                            <div class="thumbnail">
+                                                <img class="img-fluid" src="{{ variant.product.image.url }}">
+                                                <div class="post-content pt-2">
+                                                    <div class="circle text-white">{{ count }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <a class="font-weight-bold text-dark">{{ variant.product.name }}</a>
+                                             <span class="pl-4">{% widthratio variant.price 1 count %}{% get_settings 'CUR_CURRENCY' %}</span>
+
+                                            {% if variant.size %}
+                                                <ul class="list-unstyled">
+                                                    <li>
+                                                        <span class="text-muted text-uppercase">{{ variant.size }}</span>
+                                                    </li>
+                                                </ul>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+
+                        {% endblock %}
+                        </tbody>
+                    </table>
+                </div>
+</div>
+  </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

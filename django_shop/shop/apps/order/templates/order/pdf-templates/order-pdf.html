@@ -1,0 +1,76 @@
+<html>
+
+  <body>
+
+
+
+  <style>
+    .table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+
+.row {
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.total {
+    margin-top:100px;
+}
+
+</style>
+
+
+
+
+    <h1>Онлайн-магазин</h1>
+    <p>
+      Номер заказа: <b>{{ order.id }}</b> <br>
+      <span>
+        {{ order.date_create }}
+      </span>
+    </p>
+    <h3>Покупатель</h3>
+    <p>
+      {{ order.first_name }} {{ order.last_name }}<br>
+      {{ order.email }} <br>
+      {{ order.address }} <br>
+      {{ order.postal_code }}, {{ order.city }}
+    </p>
+    <h3>Купленные товары</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th>Стоймость</th>
+          <th>Количество</th>
+          <th>Всего</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order.orderitem_set.all %}
+          <tr class="row">
+            <td> {{ item.type_product.name }}</td>
+            <td>{{ item.type_product.price }}</td>
+            <td>{{ item.count }}</td>
+            <td>{{ item.price }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  <tr  class="total">
+          <td >Всего:</td>
+          <td>{{ order.total_price }}</td>
+  </tr>
+<hr>
+    <span>
+      {% if order.paid %}Оплачен{% else %}Ожидает оплаты{% endif %}
+    </span>
+  </body>
+</html>

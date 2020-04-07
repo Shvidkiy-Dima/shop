@@ -1,0 +1,30 @@
+.post-content {
+    top:0;
+    left:0;
+    position: absolute;
+}
+
+.thumbnail{
+    position:relative;
+
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+    vertical-align: middle;
+  background: #D05353;
+  font-size: 14px;
+}
+
+.orders {
+width:150px;
+height:100px;
+
+overflow-x: scroll; /* прокрутка по горизонтали */
+overflow-y: scroll; /* прокрутка по вертикали */
+
+overflow: auto;
+}

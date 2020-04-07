@@ -1,0 +1,88 @@
+{% extends 'core/mainpage.html' %}
+{% load static %}
+{% load design_tags %}
+{% load get_settings from core_tags  %}
+{% load cache %}
+
+
+{% block body %}
+
+
+{% cache 600 detail_product_main request.path %}
+   <div class="container-fluid">
+      <div class="row">
+            <div class="col-lg-7">
+                <div class="row">
+                    <div class="col-12">
+                    {% slides_products product.id %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card shadow">
+                    <div class="card-body">
+                        {% with variant=product.get_main_variant size=product.get_size %}
+                        <h3><strong>{{ product.name }}</strong></h3>
+                        {% if product.get_count < 0 %}
+                            count
+                        {% endif %}
+                         <p class="font-weight-bold" data-id="variant-price">{{ variant.price }}</p> {% get_settings 'CUR_CURRENCY' %}
+                   {% if size %}
+                <div class="col-3 px-0 pb-2">
+                    <label>Size</label>
+                  <select id="size-change-product" class="custom-select">
+                      {% for variant in size %}
+                 <option value="{{ variant.id }}" data-price="{{ variant.price }}">{{ variant.size }}</option>
+                      {% endfor %}
+                  </select>
+                    </div>
+                  {% endif %}
+                        <button type="button" class="btn btn-secondary btn-block mb-3"  data-id="{{ variant.id }}" data-action="order-product" >
+                    <span class="font-weight-bold" style="font-size: 20px">
+                        <i class="material-icons"> add_shopping_cart </i>
+                        Add to Cart
+                        </span>
+                         </button>
+                        {% endwith %}
+
+                                        {% if product.description %}
+                <h5 class="font-weight-bold">DESCRIPTION:</h5>
+                <p>{{ product.description }}</p>
+                {% endif %}
+
+                {% if product.features %}
+                <h5 class="font-weight-bold">FEATURES:</h5>
+                <p>{{ product.features }}</p>
+                {% endif %}
+
+
+                </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            </div>
+
+      </div>
+{% endcache %}
+{% endblock %}
+
+
+
+
+
+
+{% block footer %}
+<script src="{% static 'core/js/post-ajax.js' %}" ></script>
+<script src="{% static 'core/js/detail-product.js' %}"></script>
+  <script src="{% static 'cart/js/delete-from-cart.js' %}" ></script>
+<script src="{% static 'cart/js/check-cart.js' %}"></script>
+<script src="{% static 'cart/js/put-in-cart-product.js' %}"></script>
+{% csrf_token %}
+{% endblock %}
+

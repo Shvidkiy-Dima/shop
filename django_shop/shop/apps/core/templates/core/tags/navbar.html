@@ -1,0 +1,59 @@
+{% load cart_tags %}
+{% load continue_order from core_tags %}
+{% load crispy_forms_tags %}
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 pb-1 sticky-top">
+  <a class="navbar-brand" href="{% url 'core:main-page' %}">Logo</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarText">
+
+    <ul class="navbar-nav mr-auto">
+        {% if form %}
+      <li class="nav-item pt-3">
+        {{ form.category|as_crispy_field }}
+      </li>
+        <li class="nav-item ml-5 pt-3">
+             {{ form.brand|as_crispy_field }}
+        </li>
+        {% endif %}
+    </ul>
+
+    <span class="navbar-text">
+
+      <ul class="navbar-nav mr-auto">
+
+
+      <li class="nav-item">
+        {% continue_order request %}
+       </li>
+
+          {% if form %}
+        <li class="nav-item pt-4">
+     <i class="material-icons">search</i>
+
+        </li>
+          <li class="nav-item mx-4 pt-3">
+              {{ form.name|as_crispy_field }}
+          </li>
+            {% endif %}
+        <li class="nav-item pt-3">
+      <a id="my-cart" class="btn">
+        <i class="material-icons">shopping_cart</i>
+        <span id="cart-counter">{% count_products_cart request %}</span></a>
+        </li>
+      </ul>
+    </span>
+
+  </div>
+</nav>
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="my-cart-modal">
+</div>
+

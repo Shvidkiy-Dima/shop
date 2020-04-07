@@ -1,0 +1,80 @@
+version: '3'
+services:
+
+  webapp:
+    build: .
+    image: webapp
+    env_file:
+      - main.env
+    depends_on:
+        - mysql
+        - redis
+        - memcached
+#    environment:
+#       - STRIPE_PUBLISHABLE_KEY
+#       - STRIPE_SECRET_KEY
+#       - PAYPAL_RECEIVER_EMAIL
+#       - DEFAULT_FROM_EMAIL
+#       - EMAIL_HOST_USER
+#       - EMAIL_HOST_PASSWORD
+#       - SECRET_KEY
+#      - PROJECT_ENV=PRODUCTION
+#      - MEMCACHED_HOST=memcached
+#      - REDIS_HOST=redis
+#      - HOST
+#      - DB_NAME
+#      - DB_PASSWORD
+#      - DB_USER
+#      - DB_HOST=mysql
+#      - DOCKER_SUPERUSER_NAME
+#      - DOCKER_SUPERUSER_PASSWORD
+    volumes:
+      - ./staticfiles:/project/staticfiles
+      - ${PWD}/error_docker.log:/project/django_shop/error.log
+      - ${PWD}/logs_docker.log:/project/django_shop/logs.log
+    entrypoint: ["./boot.sh"]
+
+  redis:
+    restart: always
+    image: redis
+
+  memcached:
+    restart: always
+    image: memcached
+
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./etc/nginx_prod.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./staticfiles:/srv/static
+    depends_on:
+      - webapp
+
+  celery:
+    image: webapp
+    environment:
+    - REDIS_HOST=redis
+    env_file:
+      - main.env
+    depends_on:
+      - redis
+      - webapp
+    command: /bin/bash -c "cd django_shop && exec celery -A shop worker -l info"
+
+  mysql:
+    image: mysql
+    env_file:
+      - main.env
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./etc/mysql_prod.cnf:/etc/mysql/conf.d/mysql_prod.cnf
+    restart: always
+#    environment:
+#      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+#      - MYSQL_DATABASE
+#      - MYSQL_USER
+#      - MYSQL_PASSWORD
+
+

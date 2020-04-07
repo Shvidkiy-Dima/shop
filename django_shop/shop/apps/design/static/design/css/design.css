@@ -1,0 +1,27 @@
+
+ol.carousel-indicators li.active {
+   background: #e5312b;
+}
+
+ol.carousel-indicators li {
+   background: #9da0a5;
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+}
+
+.carousel-control-next-icon:after
+{
+  content: '>';
+  font-size: 55px;
+  color: black;
+}
+
+.carousel-control-prev-icon:after {
+  content: '<';
+  font-size: 55px;
+  color: black;
+}

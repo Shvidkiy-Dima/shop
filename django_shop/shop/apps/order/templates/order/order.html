@@ -1,0 +1,83 @@
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+
+{% block title %}
+  Заказ {{ order.id }} {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url "admin:index" %}">Главная</a> ›
+  <a href="{% url "admin:order_ordermodel_changelist" %}">Заказы</a> ›
+  Детали
+</div>
+{% endblock %}
+
+{% block content %}
+  <h1>Заказ {{ object.id }}</h1>
+  <ul class="object-tools">
+    <li>
+      <a href="#" onclick="window.print()">Распечатать заказ</a>
+    </li>
+  </ul>
+  <table width="100%">
+    <tr>
+      <th>Создан</th>
+      <td>{{ object.date_create }}</td>
+    </tr>
+    <tr>
+      <th>Заказчик</th>
+      <td>{{ object.first_name }} {{ object.last_name }}</td>
+    </tr>
+    <tr>
+      <th>E-mail</th>
+      <td><a href="mailto:{{ order.email }}">{{ object.email }}</a></td>
+    </tr>
+    <tr>
+      <th>Город</th>
+      <td>{{ object.city }}</td>
+    </tr>
+      <th>Адрес</th>
+      <td>{{ object.address }}</td>
+    </tr>
+    <tr>
+      <th>Полная стоймость</th>
+      <td>{{ object.total_price }} руб.</td>
+    </tr>
+    <tr>
+      <th>Статус</th>
+      <td>{% if object.paid %}Оплачен{% else %}В ожидании оплаты{% endif %}</td>
+    </tr>
+  </table>
+
+  <div class="module">
+    <div class="tabular inline-related list-related">
+      <table>
+        <h2>Заказанные товары</h2>
+        <thead>
+          <tr>
+            <th>Товар</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Стоймость всего</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in object.orderitem_set.all  %}
+            <tr>
+              <td>{{ item.type_product.name }}</td>
+              <td>{{ item.variant_product.price }} руб.</td>
+              <td>{{ item.count }}</td>
+              <td>{{ item.price }} руб.</td>
+            </tr>
+          {% endfor %}
+          <tr class="total">
+            <td colspan="3">Всего</td>
+            <td class="num">{{ object.total_price }} руб.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

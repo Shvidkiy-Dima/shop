@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% load core_tags %}
+{% load design_tags %}
+{% load crispy_forms_tags %}
+
+
+{% block bootstrap %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% bootstrap_messages %}
+{% endblock %}
+
+
+
+
+{% block head %}
+
+<link rel="stylesheet" href="{% static 'core/css/core.css' %}">
+<link rel="stylesheet" href="{% static 'design/css/design.css' %}">
+  {% navbar request=request form=filter.form %}
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="base-shop-modal">
+</div>
+
+
+{% endblock %}
+
+
+
+{% block body %}
+{{ test }}
+{% slides %}
+{% main_filter form=filter.form %}
+
+<div id="list-products">
+
+{% include 'core/objects/products.html' %}
+
+</div>
+
+
+{% endblock %}
+
+
+{% block footer %}
+
+
+
+<script src="{% static 'core/js/post-ajax.js' %}" ></script>
+<script src="{% static 'core/js/detail-product.js' %}"></script>
+  <script src="{% static 'core/js/load-products.js' %}" ></script>
+
+  <script src="{% static 'cart/js/delete-from-cart.js' %}" ></script>
+<script src="{% static 'cart/js/check-cart.js' %}"></script>
+<script src="{% static 'cart/js/put-in-cart-product.js' %}"></script>
+
+{% csrf_token %}
+{% endblock %}
+
+

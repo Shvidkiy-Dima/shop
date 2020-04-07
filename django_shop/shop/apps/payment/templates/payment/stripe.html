@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-body text-center">
+
+ <h3>Оплата через Stripe</h3>
+
+<form action="{% url 'payment:stripe-pay' %}" method="post">
+    {% csrf_token %}
+    <article>
+      <label>
+        <span>Amount is ${{ amount }}</span>
+      </label>
+    </article>
+
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="{{ key }}"
+            data-description="A Flask Charge"
+            data-amount="{{ full_amount }}"
+            data-locale="auto"></script>
+  </form>
+  </div>
+</div>
